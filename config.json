@@ -2,14 +2,24 @@
   "node": "https://testnet.lisk.io",
   "port": "443",
   "isTestnet": true,
-  "epochPoolTime": 1516110177,
-  "sharedPercent": 30,
+  "epochPoolTime": 1593738603,
+  "sharedPercent": 20,
+  "sharingDelegates": 3,
   "minPayout": 1,
-  "delegatePubKey":
-    "dcd8ad985ee1e9f0a9e2e180e06d05fe43041b57a895dcf6b6c48046366ba19e",
-  "exclude": {
-    "addresses": [],
-    "weightCap": 100000
-  },
-  "weightCap": [50000, 70000, 100000]
+  "referenceDelegatePubKey":
+    "056951cf28cf57f19f1bc3edbd2248c0e88a852f19e6c979e474f4f74d24dfce",
+  "poolMembers": [
+    "3436369aa138ccafc30446b7a3724fe03760e8063ef0222f82fe84bc5b1d3b81",
+    "db11c31ac5f62364a42016e1004465428e8d985a2d6e00590a51fb2fc4400b18",
+    "fd061b9146691f3c56504be051175d5b76d1b1d0179c5c4370e18534c5882122",
+    "056951cf28cf57f19f1bc3edbd2248c0e88a852f19e6c979e474f4f74d24dfce"
+  ],
+  "poolAddresses": [
+    "15032584010930811152L",
+    "1469027116403016070L",
+    "14628350534858367799L",
+    "16492307295714669100L"
+  ]
 }
+
+

@@ -1,8 +1,7 @@
 const { APIClient } = require("lisk-elements").default;
 const { fromRawLsk, getTotalVoteWeight } = require("./lisk.js");
 const {
-  removeExludedAccounts,
-  validateAccountWeight
+  filterBlacklistedAddresses
 } = require("./accounts.js");
 const config = require("../../config.json");
 
@@ -13,11 +12,12 @@ const client = config.isTestnet
   : APIClient.createMainnetAPIClient({ node });
 
 const getRewards = async (fromTimestamp, toTimestamp) => {
-  console.log("Get forging data...");
+  console.log(`Get forging data for period ${new Date(fromTimestamp).toLocaleString()} to ${new Date(toTimestamp).toLocaleString()}`);
+
   // Get delegate address for next request
   const {
     data: [delegate]
-  } = await client.delegates.get({ publicKey: config.delegatePubKey });
+  } = await client.delegates.get({ publicKey: config.referenceDelegatePubKey });
   const { address } = delegate.account;
 
   const { data } = await client.delegates.getForgingStatistics(address, {
@@ -33,40 +33,62 @@ const getRewards = async (fromTimestamp, toTimestamp) => {
 };
 
 const getAllVoters = async () => {
-  let currentOffset = 0;
-  let voters = [];
-  let keepGoing = true;
+  let voters = {};
 
-  while (keepGoing) {
-    const { data } = await client.voters.get({
-      publicKey: config.delegatePubKey,
-      limit: 50,
-      offset: currentOffset
-    });
-    voters.push.apply(voters, data.voters);
-    if (data.votes <= currentOffset) {
-      keepGoing = false;
-    } else {
-      currentOffset += 50;
+  const pubKeys = config.poolMembers;
+
+  for (const [i, pk] of pubKeys.entries()) {
+    let keepGoing = true;
+    let currentOffset = 0;
+
+    voters[i] = [];
+
+    while (keepGoing) {
+      const { data } = await client.voters.get({
+        publicKey: pk,
+        limit: 50,
+        offset: currentOffset
+      });
+      voters[i].push(...data.voters);
+      if (data.votes <= currentOffset) {
+        keepGoing = false;
+      } else {
+        currentOffset += 50;
+      }
     }
   }
-  return voters;
+
+  // console.debug(voters, 'voters');
+
+  const commonVoters = voters[0]
+
+  // Find common voters
+  for (var i in voters) {
+    for (var k in commonVoters) {
+      if (!JSON.stringify(voters[i]).includes(JSON.stringify(commonVoters[k]))) {
+        commonVoters.splice(k, 1);
+      }
+    }
+  }
+
+  console.log(`Voters voting for the pool: ${commonVoters.length}`);
+
+
+  return commonVoters;
 };
 
 const getAccountsAndTotalVoteWeight = async () => {
-  console.log("Get accounts data...");
+  console.log("Getting accounts data...");
 
   const voters = await getAllVoters();
 
-  console.log(`Found ${voters.length} voters`);
+  const filteredAccounts = filterBlacklistedAddresses(voters); // Exclude accounts based on config
 
-  const filteredAccounts = removeExludedAccounts(voters); // Exlude accounts based on config
-  const validatedAccounts = validateAccountWeight(filteredAccounts); // Change accounts weight
+  console.log("Calculating total vote weight...");
 
-  console.log("Calculate total vote weight...");
   const totalWeight = getTotalVoteWeight(filteredAccounts);
   return {
-    accounts: filteredAccounts,
+    accounts: voters,
     totalWeight
   };
 };

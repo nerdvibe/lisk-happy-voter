@@ -24,7 +24,7 @@ const calculateRewards = (accounts, reward, voteWeight) =>
         (acc, { address, balance }) =>
             acc.concat({
                 address,
-                balance: fromRawLsk(balance) * reward / voteWeight,
+                balance: (fromRawLsk(balance) * reward / voteWeight),
             }),
         [],
     );

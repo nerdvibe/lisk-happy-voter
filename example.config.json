@@ -1,14 +1,25 @@
 {
-    "node": "<NODE IP>",
-    "port": "<NODE PORT>",
-    "isTestnet": true, // True for test net, false for main
-    "epochPoolTime": 1516110177,  // date in unix format from which you want to calculate a pyouts
-    "sharedPercent": 50, // Share percent
-    "minPayout": 1, // Min payout amount
-    "delegatePubKey": "DELEGATE PUB KEY",
-    "exclude": {
-        "addresses": [], // Add addresses to exlude
-        "weightCap": 100000 // Remove accounts with cap greater or equal then value. `null` value will turn of this filter
-    },
-    "weightCap": [50000, 70000, 100000] // Add weight cap rule to change accounts weight (example: account with weight 75k becomes 70k, 120k becomes 100). Leave empty array if you will not use this
+    "node": "https://testnet.lisk.io",
+    "port": "443",
+    "isTestnet": true,
+    "epochPoolTime": 1593738603,
+    "sharedPercent": 20,
+    "sharingDelegates": 3,
+    "minPayout": 1,
+    "referenceDelegatePubKey":
+    "056951cf28cf57f19f1bc3edbd2248c0e88a852f19e6c979e474f4f74d24dfce",
+    "poolMembers": [
+        "3436369aa138ccafc30446b7a3724fe03760e8063ef0222f82fe84bc5b1d3b81",
+        "db11c31ac5f62364a42016e1004465428e8d985a2d6e00590a51fb2fc4400b18",
+        "fd061b9146691f3c56504be051175d5b76d1b1d0179c5c4370e18534c5882122",
+        "056951cf28cf57f19f1bc3edbd2248c0e88a852f19e6c979e474f4f74d24dfce"
+    ],
+    "poolAddresses": [
+        "15032584010930811152L",
+        "1469027116403016070L",
+        "14628350534858367799L",
+        "16492307295714669100L"
+    ]
 }
+
+

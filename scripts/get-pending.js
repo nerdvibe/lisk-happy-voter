@@ -30,37 +30,15 @@ $$$$$$$$\\ $$ |$$$$$$$  |$$ | \\$$\\       $$ |     \\$$$$$$$ |\\$$$$$$$ |\\$$$$
                                                            \\$$$$$$  |                              
                                                             \\______/                               
 
-~~~ Get payout ~~~
+~~~ check status of pending payouts ~~~
 
 `);
 
 
 (async () => {
     const data = getBalanceFile();
-    const today = getDate(); // Calculate rewards only from start of the day not from execution time
-    const { reward, sharingReward } = await getRewards(data.lastpayout, today);
+    const totalToBePaid = Object.keys(data.accounts).reduce((acc, key) => acc + (+data.accounts[key].pending), 0)
 
-    const adjustedSharingReward = sharingReward * config.sharingDelegates; // multiplying for # of sharing delegates
-
-    console.log(
-        `Forged by pool: ${reward * config.sharingDelegates} LSK from ${new Date(
-            data.lastpayout,
-        ).toLocaleString()}`,
-    );
-
-    console.log(
-        `Sharing ${config.sharedPercent}% with voters: ${adjustedSharingReward} LSK`, `\n`
-    );
-
-    const { accounts, totalWeight } = await getAccountsAndTotalVoteWeight();
-
-    console.log(`Total weight is ${totalWeight} LSK`, '\n');
-    console.log('Calculate voters rewards...');
-
-    const rewards = calculateRewards(accounts, adjustedSharingReward, totalWeight);
-    console.log('Saving data...');
-    saveRewards(data, rewards, today);
-    console.log('Data saved to file.');
-
-    console.log('\n\n',`👉💰 Make sure there are at least ${adjustedSharingReward} LSK on the payout address!💰👈`, '\n\n');
+    console.log();
+    console.log('\n\n',`👉 Last payout generated on ${new Date(data.lastpayout).toISOString()}, pending: ${totalToBePaid} LSK 👈`, '\n\n');
 })();

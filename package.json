@@ -1,12 +1,13 @@
 {
-  "name": "yet-another-lisk-pool",
+  "name": "lisk-happy-voter",
   "version": "0.0.2",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "get:payouts": "node ./scripts/get-payouts.js",
     "sign:transactions": "node ./scripts/sign-transactions.js",
-    "broadcast:transactions": "node ./scripts/broadcast-transactions.js"
+    "broadcast:transactions": "node ./scripts/broadcast-transactions.js",
+    "help:get-pending": "node ./scripts/get-pending.js"
   },
   "dependencies": {
     "bignumber.js": "^5.0.0",

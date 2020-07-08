@@ -1,30 +1,65 @@
-yet-another-lisk-pool
-=====
+# 🤖💰 lisk-happy-voter (for pools)
+#### Simple Lisk payout script focused on multi delegate pools
 
-Simple Lisk pool script (in development)
-------------
+This script is forked from [yet-another-lisk-pool](https://github.com/alepop/yet-another-lisk-pool) from Alepop delegate and adapted for pools payouts.
 
-Installation
-------------
+## Installation
 
-    git clone https://github.com/alepop/yet-another-lisk-pool.git
-    cd ./yet-another-lisk-pool
-    mkdir data
-    npm install
+    git clone https://github.com/nerdvibe/lisk-happy-voter.git
+    cd ./lisk-happy-voter
+    yarn
 
-
-Usage
------
+## Configuration
 Rename `example.config.json` to `config.json` and fill it with your settings.
 
-Then you can use this commands:
+```json
+{
+    "node": "https://testnet.lisk.io",
+    "port": "443",
+    "isTestnet": true,
+    "epochPoolTime": 1593738603,
+    "sharedPercent": 20,
+    "sharingDelegates": 3,
+    "minPayout": 1,
+    "referenceDelegatePubKey":
+    "the delegate where the blocks will be counted",
+    "poolMembers": [
+        "pubKey for each delegate in the pool, used to get the voters",
+        "pubKey for each delegate in the pool, used to get the voters",
+    ],
+    "poolAddresses": [
+        "address for each delegate in the pool, blacklisted from reward",
+        "address for each delegate in the pool, blacklisted from reward",
+        "address for each delegate in the pool, blacklisted from reward"
+    ]
+}
+```
+
+where:
+ - `epochPoolTime` is the first time the pool has been created in unix timestamp
+ - `sharingDelegates` is the number of delegates sharing the rewards in the group.
+  
+## Usage
+
+Use this commands:
 
 
 ```js
-npm run get:payouts // will calculate rewards and safe it to the ./data/balance.json file
+yarn get:payouts // will calculate rewards and save it to the ./data/balance.json file
 
-npm run sign:transactions -- "secret" "secondSecre" // will sign transaction and safe it to the ./data/payouts.json file
+yarn sign:transactions -- "secret" "secondSecret" // will sign transaction and save it to the ./data/payouts.json file
 
-npm run broadcast:transactions // Broad cast transactions to the network
+yarn broadcast:transactions // Broadcast transactions to the network
 
+
+// in case you want to know how much is the payout after you generated
+
+yarn help:get-pending
 ```
+
+## Todos
+
+- Remove vote-all rule
+- Update deps & Node
+- Switch to bigJS and fix rounding issues
+- Go Typescript
