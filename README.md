@@ -62,4 +62,5 @@ yarn help:get-pending
 - Remove vote-all rule
 - Update deps & Node
 - Switch to bigJS and fix rounding issues
+- Fix prettier
 - Go Typescript
