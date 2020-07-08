@@ -1,4 +1,4 @@
-# <img src="https://github.com/nerdvibe/lisk-happy-voter/blob/master/meta/lsk.png?raw=true" height="40" width="40" align="left"> lisk-happy-voter (for pools)  🥳
+# <img src="https://github.com/nerdvibe/lisk-happy-voter/blob/master/meta/lsk.png?raw=true" height="40" width="40" align="left">lisk-happy-voter (for pools)  🥳
 #### Simple Lisk payout script focused on multi delegate pools
 
 This script is forked from [yet-another-lisk-pool](https://github.com/alepop/yet-another-lisk-pool) from Alepop delegate and adapted for pools payouts.
