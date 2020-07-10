@@ -36,6 +36,9 @@ $$$$$$$$\\ $$ |$$$$$$$  |$$ | \\$$\\       $$ |     \\$$$$$$$ |\\$$$$$$$ |\\$$$$
 
 
 (async () => {
+
+    const startTime = new Date();
+
     const data = getBalanceFile();
     const today = getDate(); // Calculate rewards only from start of the day not from execution time
     const { reward, sharingReward } = await getRewards(data.lastpayout, today);
@@ -63,4 +66,8 @@ $$$$$$$$\\ $$ |$$$$$$$  |$$ | \\$$\\       $$ |     \\$$$$$$$ |\\$$$$$$$ |\\$$$$
     console.log('Data saved to file.');
 
     console.log('\n\n',`👉💰 Make sure there are at least ${adjustedSharingReward} LSK on the payout address!💰👈`, '\n\n');
+
+    const finishTime = new Date();
+
+    console.log(`\nScript executed in ${(finishTime-startTime)/1000}\n`)
 })();

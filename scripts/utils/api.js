@@ -42,6 +42,7 @@ const getAllVoters = async () => {
     let currentOffset = 0;
 
     voters[i] = [];
+    console.log(`[${i+1}/${config.poolMembers.length}]Checking votes for ${pk}`);
 
     while (keepGoing) {
       const { data } = await client.voters.get({
@@ -50,6 +51,12 @@ const getAllVoters = async () => {
         offset: currentOffset
       });
       voters[i].push(...data.voters);
+
+      if(currentOffset === 0) {
+        console.log(`This delegate has ${data.votes} votes`);
+      }
+      console.log(`[${i+1}/${config.poolMembers.length}]calculating ${currentOffset+50} votes of ${data.votes}`);
+
       if (data.votes <= currentOffset) {
         keepGoing = false;
       } else {
