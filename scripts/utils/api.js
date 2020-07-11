@@ -67,11 +67,12 @@ const getAllVoters = async () => {
 
   // console.debug(voters, 'voters');
 
-  const commonVoters = voters[0]
+  // Pick the delegate with the least voters
+  const commonVoters = Object.keys(voters).reduce((acc, curr) => voters[curr].length < acc.length || acc.length === 0  ? voters[curr] : acc, [])
 
   // Find common voters
-  for (var i in voters) {
-    for (var k in commonVoters) {
+  for (let i in voters) {
+    for (let k in commonVoters) {
       if (!JSON.stringify(voters[i]).includes(JSON.stringify(commonVoters[k]))) {
         commonVoters.splice(k, 1);
       }
