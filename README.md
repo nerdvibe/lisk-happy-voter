@@ -65,7 +65,7 @@ yarn help:get-pending
 - Fix prettier
 - Go Typescript
 
-Brought to you by 🍝Carbonara (lisk.chat @ carbonara) together with the efforts yet [yet-another-lisk-pool](https://github.com/alepop/yet-another-lisk-pool).
+### Brought to you by 🍝Carbonara (lisk.chat @ carbonara) together with the efforts yet [yet-another-lisk-pool](https://github.com/alepop/yet-another-lisk-pool).
 
 ## Disclaimer
 
