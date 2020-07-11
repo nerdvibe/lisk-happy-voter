@@ -68,16 +68,18 @@ const getAllVoters = async () => {
   // console.debug(voters, 'voters');
 
   // Pick the delegate with the least voters
-  const commonVoters = Object.keys(voters).reduce((acc, curr) => voters[curr].length < acc.length || acc.length === 0  ? voters[curr] : acc, [])
+  let commonVoters = Object.keys(voters).reduce((acc, curr) => voters[curr].length < acc.length || acc.length === 0  ? voters[curr] : acc, [])
 
   // Find common voters
   for (let i in voters) {
     for (let k in commonVoters) {
       if (!JSON.stringify(voters[i]).includes(JSON.stringify(commonVoters[k]))) {
-        commonVoters.splice(k, 1);
+        commonVoters[k] = null;
       }
     }
   }
+
+  commonVoters = commonVoters.filter(voter => voter != null);
 
   console.log(`Voters voting for the pool: ${commonVoters.length}`);
 
@@ -96,7 +98,7 @@ const getAccountsAndTotalVoteWeight = async () => {
 
   const totalWeight = getTotalVoteWeight(filteredAccounts);
   return {
-    accounts: voters,
+    accounts: filteredAccounts,
     totalWeight
   };
 };
