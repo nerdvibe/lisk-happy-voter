@@ -5,7 +5,7 @@ const {
     overideBalanceFile,
     saveSignedTransactions,
 } = require('./utils/file.js');
-const { toRawLsk } = require('./utils/lisk.js');
+const { toRawLsk, fromRawLsk } = require('./utils/lisk.js');
 
 const passphrase = process.argv[2];
 const secondPassphrase = process.argv[3];
@@ -57,12 +57,21 @@ $$$$$$$$\\ $$ |$$$$$$$  |$$ | \\$$\\       $$ |     \\$$$$$$$ |\\$$$$$$$ |\\$$$$
 `);
 
 (async () => {
+    const bonusTotal = 235;
     const data = getBalanceFile();
     const addressIds = getPayoutAddresses(data);
     const accountsToPay = addressIds.map(id => ({
         address: id,
         amount: data.accounts[id].pending - 0.1,
     }));
+
+    console.log(`Adding grajson bonus to ${accountsToPay.length} wallets`);
+    const individualBonus = bonusTotal / accountsToPay.length;
+    accountsToPay.forEach((account) => {
+      account.amount = +account.amount + individualBonus
+    })
+    console.log(`Added ${individualBonus} LSK to each wallet with balance >1`);
+
 
     console.log('Sign transactions...');
     const signedTransactions = getSignedTransactions(accountsToPay);
