@@ -57,7 +57,7 @@ $$$$$$$$\\ $$ |$$$$$$$  |$$ | \\$$\\       $$ |     \\$$$$$$$ |\\$$$$$$$ |\\$$$$
 `);
 
 (async () => {
-    const bonusTotal = 235;
+    const bonusTotal = 500;
     const data = getBalanceFile();
     const addressIds = getPayoutAddresses(data);
     const accountsToPay = addressIds.map(id => ({
