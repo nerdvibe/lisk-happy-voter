@@ -4,7 +4,17 @@ const path = require('path');
 const { updateRewards } = require('./lisk.js');
 
 const BALANCE_FILE = path.resolve('data/balance.json');
+const INACTIVE_VOTERS = path.resolve('data/inactiveVoters.json');
 const SIGNED_TRANSACTION_FILE = path.resolve('data/payout.json');
+
+const getInactiveVotersFile = () => {
+    try {
+        return fs.readFileSync(INACTIVE_VOTERS);
+    } catch (error) {
+        fs.writeFileSync(INACTIVE_VOTERS, [], { spaces: 2 });
+        return data;
+    }
+};
 
 const getBalanceFile = () => {
     try {
@@ -21,6 +31,9 @@ const getBalanceFile = () => {
 
 const overideBalanceFile = data =>
     fs.writeFileSync(BALANCE_FILE, data, { spaces: 2 });
+
+const saveTempVotersFromApi = data =>
+    fs.writeFileSync(path.resolve('data/votersFromApi.json'), data, { spaces: 2 });
 
 // Update and save data to file
 const saveRewards = (data, rewards, date) => {
@@ -50,4 +63,6 @@ module.exports = {
     overideBalanceFile,
     saveSignedTransactions,
     getSignedTransactionsFile,
+    getInactiveVotersFile,
+    saveTempVotersFromApi
 };

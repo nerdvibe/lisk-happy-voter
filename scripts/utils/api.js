@@ -1,3 +1,7 @@
+const {saveTempVotersFromApi, getInactiveVotersFile} = require("./file");
+// const fs = require('jsonfile');
+// const path = require('path');
+
 const { APIClient } = require("lisk-elements").default;
 const { fromRawLsk, getTotalVoteWeight } = require("./lisk.js");
 const {
@@ -47,7 +51,7 @@ const getAllVoters = async () => {
     while (keepGoing) {
       const { data } = await client.voters.get({
         publicKey: pk,
-        limit: 50,
+        limit: 99,
         offset: currentOffset
       });
       voters[i].push(...data.voters);
@@ -55,36 +59,66 @@ const getAllVoters = async () => {
       if(currentOffset === 0) {
         console.log(`This delegate has ${data.votes} votes`);
       }
-      console.log(`[${i+1}/${config.poolMembers.length}]calculating ${currentOffset+50} votes of ${data.votes}`);
+      console.log(`[${i+1}/${config.poolMembers.length}]calculating ${currentOffset+99} votes of ${data.votes}`);
 
       if (data.votes <= currentOffset) {
         keepGoing = false;
       } else {
-        currentOffset += 50;
+        currentOffset += 99;
       }
     }
   }
 
-  // console.debug(voters, 'voters');
-
-  // Pick the delegate with the least voters
-  let commonVoters = Object.keys(voters).reduce((acc, curr) => voters[curr].length < acc.length || acc.length === 0  ? voters[curr] : acc, [])
-
-  // Find common voters
+  let votes = { }
+  let votesList = []
   for (let i in voters) {
-    for (let k in commonVoters) {
-      if (!JSON.stringify(voters[i]).includes(JSON.stringify(commonVoters[k]))) {
-        commonVoters[k] = null;
+    voters[i].map((voter) => {
+      if(votes[voter.address]){
+        votes[voter.address].matchedVotes++
+      }else{
+        votes[voter.address]={
+          ...voter,
+          "matchedVotes": 1
+        }
       }
-    }
+    })
   }
 
-  commonVoters = commonVoters.filter(voter => voter != null);
+  // for quick testing, save votes in a file
+  // saveTempVotersFromApi(votes)
+  // for quick testing, load votes in a file
+  // const votes = fs.readFileSync(path.resolve('data/votersFromApi.json'))
 
-  console.log(`Voters voting for the pool: ${commonVoters.length}`);
+  const inactiveVoters = getInactiveVotersFile();
+
+  Object.keys(votes).map((el) => {
+    let weightMultiplier = 1;
+
+    if(inactiveVoters.includes(votes[el].address)){
+      weightMultiplier = 0.1
+    } else if(1 <= votes[el].matchedVotes <= 5) {
+      weightMultiplier = 1
+    } else if (6 <= votes[el].matchedVotes <= 9) {
+      weightMultiplier = 6
+    } else if (votes[el].matchedVotes === 10) {
+      weightMultiplier = 10
+    }
+
+    // 500k
+    // const cappedVW = votes[el].balance > 50000000000000 ? 50000000000000 : votes[el].balance;
+    // 1m
+    const cappedVW = votes[el].balance > 100000000000000 ? 100000000000000 : votes[el].balance;
+    // const cappedVW = votes[el].balance;
+
+    votes[el].balance = cappedVW * weightMultiplier
+    votesList.push(votes[el])
+  })
+
+  console.log(`Voters voting for the pool: ${votesList.length}`);
 
 
-  return commonVoters;
+
+  return votesList;
 };
 
 const getAccountsAndTotalVoteWeight = async () => {
