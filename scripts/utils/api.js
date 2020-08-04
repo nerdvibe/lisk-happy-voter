@@ -94,14 +94,14 @@ const getAllVoters = async () => {
   Object.keys(votes).map((el) => {
     let weightMultiplier = 1;
 
-    if(inactiveVoters.includes(votes[el].address)){
-      weightMultiplier = 0.1
-    } else if(1 <= votes[el].matchedVotes <= 5) {
-      weightMultiplier = 1
-    } else if (6 <= votes[el].matchedVotes <= 9) {
-      weightMultiplier = 6
+    if (inactiveVoters.includes(votes[el].address)) {
+      weightMultiplier = .1
+    } else if (votes[el].matchedVotes <= 5) {
+      weightMultiplier = .1
+    } else if (6 <= votes[el].matchedVotes && votes[el].matchedVotes <= 9) {
+      weightMultiplier = .6
     } else if (votes[el].matchedVotes === 10) {
-      weightMultiplier = 10
+      weightMultiplier = 1
     }
 
     // 500k
@@ -115,8 +115,6 @@ const getAllVoters = async () => {
   })
 
   console.log(`Voters voting for the pool: ${votesList.length}`);
-
-
 
   return votesList;
 };
