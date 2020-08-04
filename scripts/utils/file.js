@@ -12,7 +12,7 @@ const getInactiveVotersFile = () => {
         return fs.readFileSync(INACTIVE_VOTERS);
     } catch (error) {
         fs.writeFileSync(INACTIVE_VOTERS, [], { spaces: 2 });
-        return data;
+        return '';
     }
 };
 
