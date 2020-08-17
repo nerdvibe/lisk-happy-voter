@@ -90,12 +90,14 @@ const getAllVoters = async () => {
   // const votes = fs.readFileSync(path.resolve('data/votersFromApi.json'))
 
   const inactiveVoters = getInactiveVotersFile();
+  let savedOnInactives = 0;
 
   Object.keys(votes).map((el) => {
     let weightMultiplier = 1;
 
     if (inactiveVoters.includes(votes[el].address)) {
       weightMultiplier = .1
+      savedOnInactives = savedOnInactives + (+votes[el].balance);
     } else if (votes[el].matchedVotes <= 5) {
       weightMultiplier = .1
     } else if (6 <= votes[el].matchedVotes && votes[el].matchedVotes <= 9) {
@@ -106,8 +108,8 @@ const getAllVoters = async () => {
 
     // 500k
     // const cappedVW = votes[el].balance > 50000000000000 ? 50000000000000 : votes[el].balance;
-    // 1m
-    const cappedVW = votes[el].balance > 100000000000000 ? 100000000000000 : votes[el].balance;
+    // 1.5m
+    const cappedVW = votes[el].balance > 150000000000000 ? 150000000000000 : votes[el].balance;
     // const cappedVW = votes[el].balance;
 
     votes[el].balance = cappedVW * weightMultiplier
@@ -115,6 +117,7 @@ const getAllVoters = async () => {
   })
 
   console.log(`Voters voting for the pool: ${votesList.length}`);
+  console.log(`Saved on inactives: ${fromRawLsk(savedOnInactives)}`);
 
   return votesList;
 };

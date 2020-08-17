@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "get:inactives": "node ./scripts/get-inactives.js",
     "get:payouts": "node ./scripts/get-payouts.js",
     "sign:transactions": "node ./scripts/sign-transactions.js",
     "broadcast:transactions": "node ./scripts/broadcast-transactions.js",
